@@ -84,11 +84,18 @@ I hope you enjoy your Neovim journey,
 P.S. You can delete this when you're done too. It's your config now! :)
 --]]
 
+-- disable netrw at the very start of your init.lua
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
+
+-- optionally enable 24-bit colour
+vim.opt.termguicolors = true
 
 -- load my remaps
 require 'viliusanas.remap'
@@ -226,10 +233,9 @@ vim.opt.rtp:prepend(lazypath)
 --    :Lazy
 --
 --  You can press `?` in this menu for help. Use `:q` to close the window
---
+
 --  To update plugins, you can run
 --    :Lazy update
---
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
@@ -607,7 +613,6 @@ require('lazy').setup({
       }
     end,
   },
-
   { -- Autoformat
     'stevearc/conform.nvim',
     opts = {
@@ -809,6 +814,23 @@ require('lazy').setup({
       --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
     end,
   },
+
+  { 'nvim-tree/nvim-tree.lua', version = '*', lazy = false, dependencies = {
+    'nvim-tree/nvim-web-devicons',
+  } },
+  config = function()
+    require('nvim-tree').setup {}
+  end,
+  {
+    'windwp/nvim-autopairs',
+    event = 'InsertEnter',
+    config = true,
+    -- use opts = {} for passing setup options
+    -- this is equalent to setup({}) function
+  },
+
+  { 'lukas-reineke/indent-blankline.nvim', main = 'ibl', opts = {} },
+
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- put them in the right spots if you want.
@@ -820,7 +842,6 @@ require('lazy').setup({
   --
   -- require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
-  -- require 'viliusanas.harpoon'
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
@@ -854,5 +875,5 @@ require('lazy').setup({
 -- vim: ts=2 sts=2 sw=2 et
 
 require 'viliusanas.harpoon'
-
+require('nvim-tree').setup()
 vim.cmd.colorscheme 'catppuccin-frappe'
